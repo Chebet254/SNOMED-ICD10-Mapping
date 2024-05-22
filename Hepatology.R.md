@@ -1,4 +1,4 @@
-# Load package
+## Load package
 ````
 require(Rdiagnosislist)
 library(tidyverse)
@@ -9,13 +9,13 @@ SNOMED <- loadSNOMED(c(
   './SnomedCT_InternationalRF2_PRODUCTION_20220731T120000Z/',
   './SnomedCT_UKClinicalRF2_PRODUCTION_20210317T000001Z/'))
 ````
-# Save the 'SNOMED' environment to a file on disk
+## Save the 'SNOMED' environment to a file on disk
 ````
 saveRDS(SNOMED, file = 'mySNOMED.RDS')
 #sample
 #SNOMED <- sampleSNOMED()
 ````
-## 1 ACUTE PANCREATITIS 
+### 1. ACUTE PANCREATITIS 
 ````
 SNOMEDconcept('Acute pancreatitis', exact = FALSE)
 
@@ -36,7 +36,7 @@ pancreatitis_codelist <- getMaps(pancreatitis_codelist, to = c('icd10'), single_
 pancreatitis_codelist <- pancreatitis_codelist %>% filter(icd10_code == 'K859')
 #write.csv(pancreatitis_codelist, "Pancreatitis.csv")
 ````
-## 2. HEPATIC FAILURE
+### 2. HEPATIC FAILURE
 ````
 SNOMEDconcept('Hepatic failure', exact = FALSE)
 
@@ -53,7 +53,7 @@ hepatic_failure_codelist <- getMaps(hepatic_failure_codelist, to = c('icd10'), s
 hepatic_failure_codelist <- hepatic_failure_codelist %>% filter(icd10_code == 'K704')
 write.csv(hepatic_failure_codelist, "Hepatic-Failure.csv")
 ````
-## 3. NECROSIS 
+### 3. NECROSIS 
 #no concept for both
 ````
 SNOMEDconcept('Acute necrosis of liver', exact = FALSE)
@@ -71,7 +71,7 @@ Acute_necrosis_codelist <- getMaps(Acute_necrosis_codelist, to = c('icd10'), sin
 Acute_necrosis_codelist <- Acute_necrosis_codelist %>% filter(icd10_code == 'K762')
 #write.csv(Acute_necrosis_codelist, "Necrosis.csv")
 ````
-## 4. HYPERTROPHY
+### 4. HYPERTROPHY
 #combined ulcer
 #ulcer$referencedComponentId
 #mapping to ICD
@@ -155,7 +155,9 @@ codelist_one_desc$relationship[which(codelist_one$conceptId %in% codelist_one_de
 write.csv(codelist_one_desc, "codelist_one_desc.csv")
 ````
 #code 2
+
 gastro[3,2]
+
 gastro_two <- ExtendedMapFull %>% filter(mapTarget == 'D01.5')
 
 #for loop to select individual phecodes 
@@ -180,7 +182,8 @@ codelist <- left_join(codelist, gastro, by = 'phecode')
 codelist <- codelist %>% select(phecode, phenotype, conceptId, icd10_code, term)%>% unique()
 codelist_desc <- left_join(codelist_desc, gastro, by = 'phecode')
 ````
-## PART 2
+### PART 2
+````
 searched_df$referencedComponentId <- as.character(searched_df$referencedComponentId)
 for (i in 1:length(searched_df)) { #x =1  
   codelist_one = SNOMEDcodelist(SNOMEDconcept(searched_df$referencedComponentId))
@@ -189,7 +192,7 @@ for (i in 1:length(searched_df)) { #x =1
   codelist_one_desc = getMaps(codelist_one_desc, to = c('icd10'), single_row_per_concept = FALSE)
 }
 
-#write.csv(codelist_one, "D:/HDR UK/IHI/OneDrive_1_11-9-2022/IHI/codelist_one.csv")
+#write.csv(codelist_one, "codelist_one.csv")
 #left join to get phecode
 phe_map_and_dictionary <- phe_map_and_dictionary[ , 1:3]
 str(phe_map_and_dictionary)
