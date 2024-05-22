@@ -1,2 +1,2 @@
-# UCL-IHI-Mapping
+# SNOMED-ICD10-Mapping
 SNOMED data pipeline 
