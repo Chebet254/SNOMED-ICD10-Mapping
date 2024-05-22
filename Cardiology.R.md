@@ -1,15 +1,19 @@
-#CARDIOLOGY
+## CARDIOLOGY
 #filter disease
+````
 cardiology <-  phe_map_and_dictionary %>% filter(spec_01 == 'Cardiology')  %>% 
   filter(type == 'Disease') 
-
-#PART 1 -OUTPUT ONE
+````
+## PART 1 -OUTPUT ONE
+````
 cardiology <- cardiology %>% select(icd10, phecode, phenotype)
 #write.csv(cardiology, "D:/HDR UK/IHI/OneDrive_1_11-9-2022/IHI/Cardiology Phenotypes.csv")
 #remove X from icd10 
 cardiology$icd10 <- gsub("X","",as.character(cardiology$icd10))
+````
 
-#finding icd10 in extended map to find referenceid
+### finding icd10 in extended map to find referenceid
+````
 cardiology_searched_df <- Map_with_terms %>% filter(mapTarget %in% cardiology$icd10)
 colnames(cardiology_searched_df) <- c("referencedComponentId", "mapTarget", "ExtendedMapTerm")
 #remove (disorder)
@@ -20,9 +24,9 @@ output_one_cardiology <- left_join(cardiology, cardiology_searched_df, by = c('i
 missing_cardiology <- output_one_cardiology[is.na(output_one_cardiology$referencedComponentId), ]
 output_one_cardiology <- output_one_cardiology[!is.na(output_one_cardiology$referencedComponentId), ] #remove NA snomed codes 
 #write.csv(output_one_cardiology, "D:/HDR UK/IHI/OneDrive_1_11-9-2022/IHI/Output1_Cardiology.csv")
-
-#OUTPUT 2
-#PART 2-OUTPUT TWO
+````
+## OUTPUT 2
+````
 output_one_cardiology$referencedComponentId <- as.integer64(output_one_cardiology$referencedComponentId)
 for (i in 1:length(output_one_cardiology)) { #x =1  
   codelist_one_cardiology = SNOMEDcodelist(SNOMEDconcept(output_one_cardiology$referencedComponentId))
@@ -38,14 +42,17 @@ for (i in 1:length(output_one_cardiology)) { #x =1
   output_one_cardiology_codelist = SNOMEDcodelist(SNOMEDconcept(output_one_cardiology$referencedComponentId), include_desc = TRUE)
   output_one_cardiology_desc = getMaps(output_one_cardiology_codelist, to = c('icd10'), single_row_per_concept = FALSE) #one to one mapping
 }
+````
 
 #join with descendants
+````
 output_one_cardiology_desc$Snomed_rship <- 'Descendant'
 output_one_cardiology_desc$Snomed_rship[which(output_one_cardiology_desc$conceptId  %in% output_one_cardiology$referencedComponentId )] <- 'Concept'
 write.csv(output_one_cardiology_desc, "D:/HDR UK/IHI/OneDrive_1_11-9-2022/IHI/Output_1b_cardiology.csv")
-
+````
 
 #output 2 desc #sanity check-output 1b
+````
 for (i in 1:length(output_two_cardiology)) { #x =1
   output_two_cardiology_codelist = SNOMEDcodelist(SNOMEDconcept(output_two_cardiology$referencedComponentId), include_desc = TRUE)
   output_two_cardiology_desc = getMaps(output_two_cardiology_codelist, to = c('icd10'), single_row_per_concept = FALSE)
@@ -60,8 +67,9 @@ missing_cardiology$missing_icd <- ''
 missing_cardiology$missing_icd[which(missing_cardiology$icd10 %in% output_one_cardiology_desc$icd10_code )] <- 'Found_in_Desc'
 m <- missing_cardiology %>% filter(missing_icd == 'Found_in_Desc')
 write.csv(missing_cardiology, "D:/HDR UK/IHI/OneDrive_1_11-9-2022/IHI/Missing Cardiology.csv")
-
-#summaries 
+````
+### summaries 
+````
 # n unique phecodes (phe_dictionary and phe_map)
 length(unique(cardiology$phecode))
 
@@ -85,3 +93,4 @@ length(unique(output_one_cardiology_desc$conceptId))
 length(unique(output_one_cardiology_desc$icd10_code))
 length(unique(output_two_cardiology_desc$conceptId))
 length(unique(output_two_cardiology_desc$icd10_code))
+````
