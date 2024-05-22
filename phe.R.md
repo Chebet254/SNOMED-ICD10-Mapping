@@ -57,7 +57,7 @@ output_one <- left_join(gastro_one, searched_df, by = c('icd10' = 'mapTarget')) 
 #missing icd10 -csv saved after finding missing codes in descendants
 missing_in_extendedmap <- output_one[is.na(output_one$referencedComponentId), ]
 output_one <- output_one[!is.na(output_one$referencedComponentId), ] #remove NA snomed codes
-#write.csv(output_one, "D:/HDR UK/IHI/OneDrive_1_11-9-2022/IHI/Output1.csv")
+#write.csv(output_one, "Output1.csv")
 ````
 ### OUTPUT TWO
 ````
@@ -71,7 +71,7 @@ colnames(codelist_one) <- c("conceptId", "ICD10_code", "SNOMEDTerm")
 output_two <- left_join(output_one, codelist_one, by = c('referencedComponentId' = 'conceptId')) %>% distinct()
 str(output_two)
 output_two$referencedComponentId <- as.character(output_two$referencedComponentId)
-#write.csv(output_two, "D:/HDR UK/IHI/OneDrive_1_11-9-2022/IHI/Output2.csv")
+#write.csv(output_two, "Output2.csv")
 ````
 
 #add descendants output 1b
@@ -86,7 +86,7 @@ for (i in 1:length(output_one)) { #x =1
 output_one_desc$Snomed_rship <- 'Descendant'
 output_one_desc$Snomed_rship[which(output_one_desc$conceptId  %in% output_one$referencedComponentId )] <- 'Concept'
 #output_one_desc$conceptId <- as.character(output_one_desc$conceptId)
-#write.csv(output_one_desc, "D:/HDR UK/IHI/OneDrive_1_11-9-2022/IHI/Output_one_desc.csv")
+#write.csv(output_one_desc, "Output_one_desc.csv")
 view(output_one_desc)
 
 
@@ -100,13 +100,13 @@ for (i in 1:length(output_two)) { #x =1
 #descendants(df$referencedComponentId)
 output_two_desc$relationship <- 'Descendant'
 output_two_desc$relationship[which(output_two$ICD10_code %in% output_two_desc$icd10_code )] <- 'Concept'
-#write.csv(output_2b, "D:/HDR UK/IHI/OneDrive_1_11-9-2022/IHI/Output2b.csv")
+#write.csv(output_2b, "Output2b.csv")
 ````
 #find missing icd10 codes
 ````
 missing_in_extendedmap$missing_icd <- ''
 missing_in_extendedmap$missing_icd[which(missing_in_extendedmap$icd10 %in% output_one_desc$icd10_code )] <- 'Found_in_Desc'
-#write.csv(missing_in_extendedmap, "D:/HDR UK/IHI/OneDrive_1_11-9-2022/IHI/Missing ICD 10.csv")
+#write.csv(missing_in_extendedmap, "Missing ICD 10.csv")
 ````
 #count
 ````
