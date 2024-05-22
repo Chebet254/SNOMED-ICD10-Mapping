@@ -3,8 +3,7 @@
 require(Rdiagnosislist)
 library(tidyverse)
 ````
-#Load UK and International SNOMED CT release files into an
-#R environment called 'SNOMED'
+#Load UK and International SNOMED CT release files into an R environment called 'SNOMED'
 ````
 SNOMED <- loadSNOMED(c(
   './SnomedCT_InternationalRF2_PRODUCTION_20220731T120000Z/',
@@ -29,8 +28,7 @@ SNOMEDconcept('pancreatitis', exact = FALSE)
 ````
 description(SNOMEDconcept('Acute pancreatitis', exact = FALSE))
 
-# The 'semantic type' function returns the semantic type of the concept
-# from the Fully Specified Name
+# The 'semantic type' function returns the semantic type of the concept from the Fully Specified Name
 semanticType(SNOMEDconcept('Heart failure'))
 
 # A list of concepts with a description containing the term 'heart'
@@ -72,9 +70,12 @@ relatedConcepts('Heart failure', 'Finding site')
 relatedConcepts('Heart', 'Finding site', reverse = TRUE)
 ````
 #SNOMED CODELISTS 
-#simple- simple listof concepts, 1 row per concept+2 columns
-#tree- hierachichal list with soncept +descendants 
-#exptree- descendats are enumerated
+simple- simple listof concepts, 1 row per concept+2 columns
+
+tree- hierachichal list with soncept +descendants 
+
+exptree- descendats are enumerated
+
 ````
 SNOMED <- sampleSNOMED()
 # Create a codelist containing all the descendants of
@@ -96,9 +97,13 @@ renal_ref <- getRefset('Renal clinical finding simple reference set')
 SNOMEDconcept('Renal failure') %in% renal_ref
 ````
 #Mapping between SNOMED CT and ICD-10 and OPCS4
+
 #SIMPLEMAP- contains mapping to CTV3 &ICD-O
+
 #EXTENDEDMAP- maps to ICD10 & OPCS4
+
 #getmaps function returns a list since there could be multiple entries per SNOMED concept
+
 ````
 my_heart_failure_codelist <- SNOMEDcodelist(
   SNOMEDconcept('Heart failure'), include_desc = TRUE)
